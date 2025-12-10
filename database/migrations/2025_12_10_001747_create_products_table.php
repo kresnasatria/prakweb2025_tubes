@@ -13,14 +13,14 @@ public function up(): void
 {
     Schema::create('products', function (Blueprint $table) {
         $table->id();
+        $table->foreignId('category_id')->constrained()->onDelete('cascade');
+        
         $table->string('name');
-        $table->string('slug')->unique();
-        $table->foreignId('category_id')->constrained()->onDelete('cascade'); // Relasi ke tabel categories
-        $table->string('thumbnail')->nullable();
+        $table->string('slug')->unique(); 
         $table->text('description');
-        $table->decimal('price', 10, 2); // Format uang (10 digit, 2 desimal)
-        $table->integer('stock')->default(0);
-        $table->boolean('is_active')->default(true); // Untuk menyembunyikan produk tanpa hapus
+        $table->decimal('price', 15, 2); // 15 digit total, 2 desimal
+        $table->integer('stock');
+        $table->string('thumbnail')->nullable(); 
         $table->timestamps();
     });
 }
