@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,18 +37,38 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
 
-// --- 2. HALAMAN PUBLIK ---
+// --- 2. CART ROUTES (Harus Login) ---
+Route::middleware('auth')->group(function () {
+    Route::get('/cart', [CartController::class, 'view'])->name('cart.view');
+    Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
+    Route::post('/cart/remove/{productId}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::post('/cart/update/{productId}', [CartController::class, 'update'])->name('cart.update');
+    Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+    Route::get('/checkout', [CartController::class, 'checkout'])->name('orders.checkout');
+});
+
+
+// --- 3. HALAMAN PUBLIK ---
 Route::get('/', [ProductController::class, 'index'])->name('products.index');
 Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name('products.show');
 
 
-// --- 3. HALAMAN USER (Harus Login) ---
+// --- 4. HALAMAN USER (Harus Login) ---
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard'); 
 
+// Orders (Harus Login)
+Route::middleware('auth')->group(function () {
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::patch('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
+    Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
+});
 
-// --- 4. HALAMAN ADMIN (Harus Login & Role Admin) ---
+
+// --- 5. HALAMAN ADMIN (Harus Login & Role Admin) ---
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     
     Route::get('/dashboard', function () {
@@ -57,6 +80,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // CRUD Categories
     Route::resource('categories', AdminCategoryController::class);
+
+    // CRUD Orders
+    Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
+    Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
+    Route::delete('/orders/{order}', [AdminOrderController::class, 'destroy'])->name('orders.destroy');
 });
 
 

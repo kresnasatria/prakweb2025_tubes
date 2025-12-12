@@ -17,4 +17,29 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    /**
+     * Product hasMany OrderItems
+     * Satu produk bisa ada di banyak order items
+     */
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    /**
+     * Product hasManyThrough Orders
+     * Produk ini pernah dipesan di order mana saja
+     */
+    public function orders()
+    {
+        return $this->hasManyThrough(
+            Order::class,
+            OrderItem::class,
+            'product_id',  // FK di order_items
+            'id',          // FK di orders
+            'id',          // PK di products
+            'order_id'     // Local key di order_items
+        );
+    }
 }

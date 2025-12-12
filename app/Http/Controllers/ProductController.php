@@ -14,23 +14,57 @@ class ProductController extends Controller
         $query = Product::with('category');
 
         // 2. Logika Search (Jika ada input 'search')
-        if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
-        }
-
-        // 3. Logika Filter Kategori (Jika ada input 'category')
-        if ($request->filled('category')) {
-            $query->whereHas('category', function($q) use ($request) {
-                $q->where('slug', $request->category);
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
             });
         }
 
-        // 4. Ambil data (12 produk per halaman)
-        // withQueryString() penting agar saat pindah halaman, search tidak hilang
-        $products = $query->latest()->paginate(12)->withQueryString();
+        // 3. Logika Filter Kategori (Jika ada input 'category')
+        if ($request->has('category') && $request->category != '') {
+            $query->where('category_id', $request->category);
+        }
 
-        // 5. Ambil daftar kategori untuk dropdown
+        // 4. Logika Filter Rentang Harga
+        if ($request->has('min_price') && $request->min_price != '') {
+            $query->where('price', '>=', $request->min_price);
+        }
+        if ($request->has('max_price') && $request->max_price != '') {
+            $query->where('price', '<=', $request->max_price);
+        }
+
+        // 5. Logika Urutkan
+        $sortBy = $request->get('sort', 'latest');
+        switch ($sortBy) {
+            case 'price_low':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_high':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'name':
+                $query->orderBy('name', 'asc');
+                break;
+            default:
+                $query->latest();
+        }
+
+        // 6. Ambil data (12 produk per halaman)
+        // withQueryString() penting agar saat pindah halaman, search tidak hilang
+        $products = $query->paginate(12)->withQueryString();
+
+        // 7. Ambil daftar kategori untuk dropdown
         $categories = Category::all();
+
+        // Jika request AJAX, return partial view
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('products.partials.product-grid', compact('products'))->render(),
+                'pagination' => (string) $products->links()
+            ]);
+        }
 
         return view('products.index', compact('products', 'categories'));
     }

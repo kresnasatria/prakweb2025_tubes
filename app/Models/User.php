@@ -46,4 +46,22 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * User hasMany Orders
+     * Satu user memiliki banyak pesanan
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * User hasManyThrough OrderItems
+     * Akses semua item yang pernah dibeli user
+     */
+    public function orderItems()
+    {
+        return $this->hasManyThrough(OrderItem::class, Order::class);
+    }
 }
