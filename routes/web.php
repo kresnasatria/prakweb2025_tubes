@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
@@ -20,15 +23,9 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'index'])->name('login');
     Route::post('/login', [AuthController::class, 'authenticate'])->name('login.process');
 
-    // Register (INI YANG KITA TAMBAHKAN)
-    // Langsung return view karena controller register mungkin belum Anda buat
-    Route::get('/register', function () {
-        return view('auth.register'); 
-    })->name('register');
-
-    // Nanti jika sudah siap bikin fitur register, aktifkan baris ini:
-    // Route::post('/register', [AuthController::class, 'register_process'])->name('register.process');
-});
+    // Register 
+    Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/register', [AuthController::class, 'register_process'])->name('register.process');});
 
 
 // Logout (Hanya untuk User Login)
@@ -55,7 +52,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         return view('admin.dashboard');
     })->name('dashboard');
 
-    // Route Product Management (CRUD) nanti disini
+    // CRUD Products
+    Route::resource('products', AdminProductController::class);
+
+    // CRUD Categories
+    Route::resource('categories', AdminCategoryController::class);
 });
 
 
