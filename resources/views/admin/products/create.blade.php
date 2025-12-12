@@ -47,7 +47,8 @@
 
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700">Gambar (opsional)</label>
-                <input type="file" name="thumbnail" class="mt-1 block w-full">
+                <input type="file" name="thumbnail" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp" class="mt-1 block w-full">
+                <p class="text-gray-500 text-xs mt-1">Format: JPEG, PNG, JPG, GIF, WEBP. Maksimal 2MB.</p>
                 @error('thumbnail') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
 

@@ -31,7 +31,11 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'description' => 'required|string',
-            'thumbnail' => 'nullable|image|max:2048',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ], [
+            'thumbnail.image' => 'File harus berupa gambar.',
+            'thumbnail.mimes' => 'Format gambar harus: jpeg, png, jpg, gif, atau webp.',
+            'thumbnail.max' => 'Ukuran gambar maksimal 2MB.',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']) . '-' . uniqid();
@@ -61,7 +65,11 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'description' => 'required|string',
-            'thumbnail' => 'nullable|image|max:2048',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ], [
+            'thumbnail.image' => 'File harus berupa gambar.',
+            'thumbnail.mimes' => 'Format gambar harus: jpeg, png, jpg, gif, atau webp.',
+            'thumbnail.max' => 'Ukuran gambar maksimal 2MB.',
         ]);
 
         if ($product->name !== $validated['name']) {
