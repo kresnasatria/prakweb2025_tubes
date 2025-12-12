@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/update/{productId}', [CartController::class, 'update'])->name('cart.update');
     Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
     Route::get('/checkout', [CartController::class, 'checkout'])->name('orders.checkout');
+    Route::post('/cart/update-all', [CartController::class, 'updateAll'])->name('cart.updateAll');
 });
 
 

@@ -5,11 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
     public function index(Request $request)
     {
+        // Redirect admin ke admin dashboard
+        if (Auth::check() && Auth::user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
         // 1. Siapkan Query (pakai 'with' agar hemat query database)
         $query = Product::with('category');
 

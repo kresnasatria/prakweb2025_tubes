@@ -57,6 +57,19 @@ class OrderController extends Controller
                 ->with('error', 'Keranjang belanja kosong');
         }
 
+        // Validasi stok terlebih dahulu
+        foreach ($cart as $productId => $item) {
+            $product = Product::find($productId);
+            if (!$product) {
+                return redirect()->route('cart.index')
+                    ->with('error', 'Produk tidak ditemukan');
+            }
+            if ($product->stock < $item['quantity']) {
+                return redirect()->route('cart.index')
+                    ->with('error', "Stok {$product->name} tidak mencukupi. Tersedia: {$product->stock}");
+            }
+        }
+
         // Hitung total
         $totalAmount = 0;
         $orderItems = [];
@@ -86,9 +99,13 @@ class OrderController extends Controller
             'notes' => $validated['notes'] ?? null,
         ]);
 
-        // Insert order items
+        // Insert order items dan kurangi stok
         foreach ($orderItems as $item) {
             OrderItem::create(array_merge(['order_id' => $order->id], $item));
+            
+            // Kurangi stok produk
+            Product::where('id', $item['product_id'])
+                ->decrement('stock', $item['quantity']);
         }
 
         // Clear session cart
@@ -109,6 +126,12 @@ class OrderController extends Controller
 
         if ($order->status !== 'pending') {
             return back()->with('error', 'Hanya pesanan pending yang bisa dibatalkan');
+        }
+
+        // Kembalikan stok produk
+        foreach ($order->orderItems as $item) {
+            Product::where('id', $item->product_id)
+                ->increment('stock', $item->quantity);
         }
 
         $order->update(['status' => 'cancelled']);
