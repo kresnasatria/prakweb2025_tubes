@@ -39,7 +39,7 @@
                         {{ ucfirst($order->status) }}
                     </span>
                 </div>
-                <p class="text-gray-500 text-sm mt-4">Tanggal: {{ $order->created_at->format('d M Y') }}</p>
+                <p class="text-gray-500 text-sm mt-4">Tanggal: {{ $order->created_at->format('d M Y H:i') }}</p>
             </div>
 
             {{-- Items --}}
