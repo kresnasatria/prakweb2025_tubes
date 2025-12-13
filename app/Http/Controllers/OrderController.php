@@ -7,6 +7,7 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
@@ -157,5 +158,22 @@ class OrderController extends Controller
         $order->delete();
 
         return redirect()->route('orders.index')->with('success', 'Pesanan berhasil dihapus');
+    }
+
+    /**
+     * Download Invoice PDF
+     */
+    public function downloadInvoice(Order $order)
+    {
+        // Pastikan user hanya bisa download invoice miliknya
+        if ($order->user_id !== Auth::id()) {
+            abort(403, 'Anda tidak berhak mengakses invoice ini');
+        }
+
+        $order->load('orderItems.product', 'user');
+
+        $pdf = Pdf::loadView('orders.invoice-pdf', compact('order'));
+        
+        return $pdf->download('invoice-' . $order->order_number . '.pdf');
     }
 }

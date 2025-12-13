@@ -63,6 +63,7 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders/{order}/invoice', [OrderController::class, 'downloadInvoice'])->name('orders.invoice');
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::patch('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
     Route::delete('/orders/{order}', [OrderController::class, 'destroy'])->name('orders.destroy');
@@ -85,6 +86,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // CRUD Orders
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders/{order}/invoice', [AdminOrderController::class, 'downloadInvoice'])->name('orders.invoice');
     Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
     Route::delete('/orders/{order}', [AdminOrderController::class, 'destroy'])->name('orders.destroy');
 });

@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -78,5 +79,18 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         return view('products.show', compact('product'));
+    }
+
+    public function destroy(Product $product)
+    {
+        // Hapus gambar jika ada
+        if ($product->thumbnail) {
+            $path = str_replace('/storage/', '', $product->thumbnail);
+            Storage::disk('public')->delete($path);
+        }
+        
+        $product->delete();
+        return redirect()->route('admin.products.index')
+            ->with('success', 'Produk berhasil dihapus!');
     }
 }

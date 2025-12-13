@@ -77,6 +77,12 @@ class ProductController extends Controller
         }
 
         if ($request->hasFile('thumbnail')) {
+            // Hapus gambar lama jika ada
+            if ($product->thumbnail) {
+                $oldPath = str_replace('/storage/', '', $product->thumbnail);
+                Storage::disk('public')->delete($oldPath);
+            }
+            
             $path = $request->file('thumbnail')->store('products', 'public');
             $validated['thumbnail'] = '/storage/' . $path;
         }
@@ -89,6 +95,12 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        // Hapus gambar jika ada
+        if ($product->thumbnail) {
+            $path = str_replace('/storage/', '', $product->thumbnail);
+            Storage::disk('public')->delete($path);
+        }
+        
         $product->delete();
         return redirect()->route('admin.products.index')
             ->with('success', 'Produk berhasil dihapus!');

@@ -77,6 +77,12 @@
                     <span>Rp {{ number_format($order->total_amount, 0, ',', '.') }}</span>
                 </div>
 
+                {{-- Tombol Download PDF --}}
+                <a href="{{ route('admin.orders.invoice', $order) }}" 
+                   class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 text-center block mb-3">
+                    📄 Download Invoice PDF
+                </a>
+
                 <form action="{{ route('admin.orders.destroy', $order) }}" method="POST">
                     @csrf
                     @method('DELETE')

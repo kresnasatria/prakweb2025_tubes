@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
@@ -80,5 +81,15 @@ class OrderController extends Controller
     {
         $order->delete();
         return redirect()->route('admin.orders.index')->with('success', 'Pesanan berhasil dihapus');
+    }
+
+    /**
+     * Download Invoice PDF (Admin)
+     */
+    public function downloadInvoice(Order $order)
+    {
+        $order->load('orderItems.product', 'user');
+        $pdf = Pdf::loadView('orders.invoice-pdf', compact('order'));
+        return $pdf->download('invoice-' . $order->order_number . '.pdf');
     }
 }
