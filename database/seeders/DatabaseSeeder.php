@@ -21,8 +21,8 @@ public function run(): void
 \App\Models\User::factory()->create([
     'name' => 'Admin Toko',
     'email' => 'admin@toko.com',
-    'password' => bcrypt('password'), // Password simpel dulu
-    'role' => 'admin', // <--- Kuncinya di sini
+    'password' => bcrypt('password'),
+    'role' => 'admin', 
 ]);
     // Logika: Buat 5 Kategori, dan SETIAP kategori memiliki 10 Produk.
     // Total akan ada 5 Kategori dan 50 Produk.

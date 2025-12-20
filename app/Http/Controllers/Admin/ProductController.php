@@ -76,16 +76,8 @@ class ProductController extends Controller
             $validated['slug'] = Str::slug($validated['name']) . '-' . uniqid();
         }
 
-        if ($request->hasFile('thumbnail')) {
-            // Hapus gambar lama jika ada
-            if ($product->thumbnail) {
-                $oldPath = str_replace('/storage/', '', $product->thumbnail);
-                Storage::disk('public')->delete($oldPath);
-            }
-            
-            $path = $request->file('thumbnail')->store('products', 'public');
-            $validated['thumbnail'] = '/storage/' . $path;
-        }
+        // fungsi handle upload gambar
+
 
         $product->update($validated);
 
