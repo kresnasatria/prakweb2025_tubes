@@ -46,7 +46,7 @@ class OrderController extends Controller
     {
         $validated = $request->validate([
             'shipping_address' => 'required|string',
-            'phone' => 'required|string',
+            'phone' => 'required|numeric',
             'notes' => 'nullable|string',
         ]);
 
