@@ -11,6 +11,8 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\LocationController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,6 +20,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 // --- 1. OTENTIKASI MANUAL ---
+
+// --- API Lokasi ---
+Route::get('/location', [LocationController::class, 'getLocation'])->name('location');
 
 // Group Middleware 'guest' artinya hanya bisa diakses jika BELUM login
 Route::middleware('guest')->group(function () {
