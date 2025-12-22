@@ -3,7 +3,7 @@
         <h1 class="text-2xl font-bold text-gray-900">Tambah Kategori</h1>
     </x-slot>
 
-    <div class="bg-white shadow rounded-lg p-6 max-w-lg">
+    <div class="py-6 px-6 lg:px-8">
         <form action="{{ route('admin.categories.store') }}" method="POST">
             @csrf
 

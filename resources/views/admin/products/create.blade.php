@@ -3,7 +3,7 @@
         <h1 class="text-2xl font-bold text-gray-900">Tambah Produk</h1>
     </x-slot>
 
-    <div class="bg-white shadow rounded-lg p-6 max-w-2xl">
+    <div class="py-6 px-6 lg:px-8">
         <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
