@@ -12,7 +12,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class OrderController extends Controller
 {
     /**
-     * Lihat semua pesanan user yang login
+     * Lihat semua pesanan user yang logi
      */
     public function index()
     {
