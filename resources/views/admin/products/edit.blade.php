@@ -1,104 +1,137 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Edit Produk
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-6">
-        <!-- FULL WIDTH CONTAINER -->
-        <div class="px-6 lg:px-8">
-            <div class="bg-white shadow rounded-lg p-6">
-                
-                <form action="{{ route('admin.products.update', $product->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
-                    @csrf
-                    @method('PUT')
+@section('content')
+<div class="px-6 py-8 w-full">
 
-                    <!-- Nama Produk -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">
-                            Nama Produk
-                        </label>
-                        <input type="text" name="name" value="{{ old('name', $product->name) }}"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            required>
-                    </div>
-
-                    <!-- Kategori -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">
-                            Kategori
-                        </label>
-                        <select name="category_id"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            required>
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->id }}"
-                                    {{ $product->category_id == $category->id ? 'selected' : '' }}>
-                                    {{ $category->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- Harga -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">
-                            Harga
-                        </label>
-                        <input type="number" name="price" value="{{ old('price', $product->price) }}"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            required>
-                    </div>
-
-                    <!-- Stok -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">
-                            Stok
-                        </label>
-                        <input type="number" name="stock" value="{{ old('stock', $product->stock) }}"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            required>
-                    </div>
-
-                    <!-- Deskripsi -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">
-                            Deskripsi
-                        </label>
-                        <textarea name="description" rows="4"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">{{ old('description', $product->description) }}</textarea>
-                    </div>
-
-                    <!-- Gambar -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">
-                            Gambar Produk
-                        </label>
-                        <input type="file" name="image"
-                            class="mt-1 block w-full text-sm text-gray-500">
-                        
-                        @if ($product->image)
-                            <img src="{{ asset('storage/' . $product->image) }}"
-                                class="mt-3 h-32 object-cover rounded">
-                        @endif
-                    </div>
-
-                    <!-- ACTION -->
-                    <div class="flex justify-end gap-3 pt-4">
-                        <a href="{{ route('admin.products.index') }}"
-                            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100">
-                            Batal
-                        </a>
-                        <button type="submit"
-                            class="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                            Update Produk
-                        </button>
-                    </div>
-
-                </form>
-
-            </div>
-        </div>
+    {{-- HEADER --}}
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Edit Produk</h1>
+        <p class="text-sm text-gray-500 mt-1">
+            Perbarui informasi produk
+        </p>
     </div>
-</x-app-layout>
+
+    {{-- FORM --}}
+    <form action="{{ route('admin.products.update', $product) }}"
+          method="POST"
+          enctype="multipart/form-data"
+          class="w-full max-w-4xl">
+
+        @csrf
+        @method('PUT')
+
+        {{-- NAMA PRODUK --}}
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">
+                Nama Produk
+            </label>
+            <input type="text"
+                   name="name"
+                   value="{{ old('name', $product->name) }}"
+                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm
+                          focus:ring-blue-500 focus:border-blue-500"
+                   required>
+
+            @error('name')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        {{-- KATEGORI --}}
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">
+                Kategori
+            </label>
+            <select name="category_id"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm
+                           focus:ring-blue-500 focus:border-blue-500"
+                    required>
+
+                <option value="">-- Pilih Kategori --</option>
+
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}"
+                        {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+
+            </select>
+
+            @error('category_id')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        {{-- HARGA --}}
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">
+                Harga
+            </label>
+            <input type="number"
+                   name="price"
+                   value="{{ old('price', $product->price) }}"
+                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm
+                          focus:ring-blue-500 focus:border-blue-500"
+                   required>
+
+            @error('price')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        {{-- STOK --}}
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">
+                Stok
+            </label>
+            <input type="number"
+                   name="stock"
+                   value="{{ old('stock', $product->stock) }}"
+                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm
+                          focus:ring-blue-500 focus:border-blue-500"
+                   required>
+
+            @error('stock')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        {{-- GAMBAR --}}
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700">
+                Gambar Produk
+            </label>
+
+            @if ($product->image)
+                <img src="{{ asset('storage/' . $product->image) }}"
+                     alt="Gambar Produk"
+                     class="w-32 h-32 object-cover rounded-md mb-3">
+            @endif
+
+            <input type="file"
+                   name="image"
+                   class="mt-1 block w-full text-sm text-gray-600">
+
+            @error('image')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        {{-- BUTTON --}}
+        <div class="flex gap-3">
+            <button type="submit"
+                    class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
+                Update
+            </button>
+
+            <a href="{{ route('admin.products.index') }}"
+               class="bg-gray-300 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-400 transition">
+                Batal
+            </a>
+        </div>
+
+    </form>
+
+</div>
+@endsection
