@@ -15,8 +15,8 @@
 </head>
 
 <body class="font-sans text-gray-900 antialiased">
-    <div class="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4">
-        {{ $slot }}
+    <div class="min-h-screen flex flex-col justify-center items-center bg-gray-100 px-4">
+        @yield('content')
     </div>
 </body>
 

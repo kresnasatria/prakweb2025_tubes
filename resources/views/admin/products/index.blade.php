@@ -53,7 +53,7 @@
                         <td class="px-4 py-3 border-b text-center">
                             <div class="flex justify-center gap-2">
                                 <a href="{{ route('admin.products.edit', $product->id) }}"
-                                   class="px-3 py-1 text-xs bg-yellow-500 text-white rounded hover:bg-yellow-600">
+                                   class="px-3 py-1.5 text-xs font-medium text-yellow-500 border border-yellow-500 rounded-md hover:bg-yellow-50 transition">
                                     Edit
                                 </a>
 
@@ -63,7 +63,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
-                                            class="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700">
+                                            class="px-3 py-1.5 text-xs font-medium text-red-600 border border-red-600 rounded-md hover:bg-red-50 transition">
                                         Hapus
                                     </button>
                                 </form>

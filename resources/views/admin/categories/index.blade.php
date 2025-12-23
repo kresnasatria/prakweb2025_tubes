@@ -49,7 +49,7 @@
 
                         <td class="px-6 py-4 text-right space-x-3">
                             <a href="{{ route('admin.categories.edit', $category) }}"
-                               class="text-blue-600 hover:underline">
+                               class="px-3 py-1.5 text-xs font-medium text-yellow-500 border border-yellow-500 rounded-md hover:bg-yellow-50 transition">
                                 Edit
                             </a>
 
@@ -61,7 +61,7 @@
                                 @method('DELETE')
 
                                 <button type="submit"
-                                        class="text-red-600 hover:underline">
+                                        class="px-3 py-1.5 text-xs font-medium text-red-600 border border-red-600 rounded-md hover:bg-red-50 transition">
                                     Hapus
                                 </button>
                             </form>
