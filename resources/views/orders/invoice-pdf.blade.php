@@ -111,12 +111,6 @@
         </table>
     </div>
 
-    <div class="info-section">
-        <strong>Status:</strong>
-        <span class="status status-{{ $order->status }}">
-            {{ ucfirst($order->status) }}
-        </span>
-    </div>
 
     <table class="items-table">
         <thead>
