@@ -13,24 +13,29 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
+    {{-- Tambahkan 'flex flex-col' agar footer bisa didorong ke bawah --}}
+    <div class="min-h-screen bg-gray-100 flex flex-col justify-between">
         
-        {{-- Navigation --}}
-        @include('layouts.navigation')
+        {{-- Wrapper Konten Atas --}}
+        <div>
+            @include('layouts.navigation')
 
-        {{-- Header (Disesuaikan agar mendukung @section) --}}
-        @hasSection('header')
-            <header class="bg-white shadow">
-                <div class="{{ request()->is('admin/*') ? 'w-full px-6 py-6' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6' }}">
-                    @yield('header')
-                </div>
-            </header>
-        @endif
+            @hasSection('header')
+                <header class="bg-white shadow">
+                    <div class="{{ request()->is('admin/*') ? 'w-full px-6 py-6' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6' }}">
+                        @yield('header')
+                    </div>
+                </header>
+            @endif
 
-        {{-- Main Content (Menggunakan @yield) --}}
-        <main class="{{ request()->is('admin/*') ? 'w-full px-6 py-6' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6' }}">
-            @yield('content')
-        </main>
+            <main class="{{ request()->is('admin/*') ? 'w-full px-6 py-6' : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6' }}">
+                @yield('content')
+            </main>
+        </div>
+
+        {{-- Include Footer di Sini (Di luar wrapper konten atas) --}}
+        @include('layouts.footer')
+        
     </div>
 </body>
 </html>
