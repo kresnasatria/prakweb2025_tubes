@@ -55,7 +55,7 @@
             Ringkasan Pemasukan
         </h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="border rounded-lg p-5 bg-green-50">
                 <p class="text-sm text-green-700">Hari Ini</p>
                 <p class="text-xl font-bold text-green-800 mt-1">
@@ -67,13 +67,6 @@
                 <p class="text-sm text-blue-700">Bulan Ini</p>
                 <p class="text-xl font-bold text-blue-800 mt-1">
                     Rp {{ number_format($pemasukanBulanIni,0,',','.') }}
-                </p>
-            </div>
-
-            <div class="border rounded-lg p-5 bg-purple-50">
-                <p class="text-sm text-purple-700">Total Keseluruhan</p>
-                <p class="text-xl font-bold text-purple-800 mt-1">
-                    Rp {{ number_format($pemasukanTotal,0,',','.') }}
                 </p>
             </div>
         </div>
