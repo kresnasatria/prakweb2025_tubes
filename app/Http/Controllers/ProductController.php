@@ -16,11 +16,9 @@ class ProductController extends Controller
         if (Auth::check() && Auth::user()->role === 'admin') {
             return redirect()->route('admin.dashboard');
         }
-
-        // 1. Siapkan Query (pakai 'with' agar hemat query database)
         $query = Product::with('category');
 
-        // 2. Logika Search (Jika ada input 'search')
+        // 1. Logika Search (Jika ada input 'search')
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -29,12 +27,12 @@ class ProductController extends Controller
             });
         }
 
-        // 3. Logika Filter Kategori (Jika ada input 'category')
+        // 2. Logika Filter Kategori (Jika ada input 'category')
         if ($request->has('category') && $request->category != '') {
             $query->where('category_id', $request->category);
         }
 
-        // 4. Logika Filter Rentang Harga
+        // 3. Logika Filter Rentang Harga
         if ($request->has('min_price') && $request->min_price != '') {
             $query->where('price', '>=', $request->min_price);
         }
@@ -42,7 +40,7 @@ class ProductController extends Controller
             $query->where('price', '<=', $request->max_price);
         }
 
-        // 5. Logika Urutkan
+        // 4. Logika Urutkan
         $sortBy = $request->get('sort', 'latest');
         switch ($sortBy) {
             case 'price_low':
@@ -58,10 +56,10 @@ class ProductController extends Controller
                 $query->latest();
         }
 
-        // 6. Ambil data (12 produk per halaman)
+        // 5. Ambil data (12 produk per halaman)
         $products = $query->paginate(12)->withQueryString();
 
-        // 7. Ambil daftar kategori untuk dropdown
+        // 6. Ambil daftar kategori untuk dropdown
         $categories = Category::all();
 
         // Jika request AJAX, return partial view
@@ -87,16 +85,4 @@ class ProductController extends Controller
         return view('products.show', compact('product', 'relatedProducts'));
     }
 
-    public function destroy(Product $product)
-    {
-        // Hapus gambar jika ada
-        if ($product->thumbnail) {
-            $path = str_replace('/storage/', '', $product->thumbnail);
-            Storage::disk('public')->delete($path);
-        }
-
-        $product->delete();
-        return redirect()->route('admin.products.index')
-            ->with('success', 'Produk berhasil dihapus!');
-    }
 }
