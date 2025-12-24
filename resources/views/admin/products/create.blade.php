@@ -71,8 +71,8 @@
         {{-- GAMBAR --}}
         <div class="mb-6">
             <label class="block text-sm font-medium text-gray-700">Gambar Produk</label>
-            <input type="file" name="image" class="mt-1 block w-full text-sm text-gray-600 border border-gray-300 rounded-md p-2">
-            @error('image') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+            <input type="file" name="thumbnail" class="mt-1 block w-full text-sm text-gray-600 border border-gray-300 rounded-md p-2">
+            @error('thumbnail') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
         </div>
 
         {{-- BUTTON --}}
