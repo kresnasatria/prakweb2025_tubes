@@ -1,13 +1,84 @@
 <footer class="bg-white border-t border-gray-200 mt-auto">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+         {{-- Lokasi Toko --}}
+
+ <!-- Leaflet CSS sama Leaflet JS-->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<style>
+    .location-card {
+        max-width: 100%;
+        margin: 40px auto;
+        background: #f8fafc;
+        border-radius: 16px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        padding: 24px;
+        text-align: center;
+    }
+    .location-title {
+        font-size: 1.6rem;
+        font-weight: bold;
+        margin-bottom: 16px;
+        color: #2d3748;
+    }
+    #map {
+        height: 350px;
+        border-radius: 12px;
+        margin-top: 12px;
+    }
+    .maps-link {
+        display: block;
+        margin: 18px auto 0 auto;
+        font-size: 1.1em;
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 500;
+        border: 1px solid #2563eb;
+        border-radius: 8px;
+        padding: 8px 18px;
+        width: fit-content;
+        transition: background 0.2s, color 0.2s;
+    }
+    .maps-link:hover {
+        background: #2563eb;
+        color: #fff;
+    }
+</style>
+
+<div class="location-card">
+    <div class="location-title">Lokasi GetReloved</div>
+    <div id="map"></div>
+    <a class="maps-link" href="https://www.google.com/maps/place/Universitas+Pasundan/@-6.866502,107.5906701,17z/data=!3m1!4b1!4m6!3m5!1s0x2e68e6be3e8a0c49:0x730028bf4627def4!8m2!3d-6.866502!4d107.593245!16s%2Fg%2F1td10cl0?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" target="_blank">
+        Buka di Google Maps
+    </a>
+</div>
+
+<script>
+    // Koordinat GetReloved
+    var lat = -6.8663741705271635; 
+    var lon = 107.59322353768817; 
+
+    var map = L.map('map').setView([lat, lon], 15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Peta Toko | © OpenStreetMap contributors'
+    }).addTo(map);
+
+    L.marker([lat, lon]).addTo(map)
+        .bindPopup('<b>Toko Saya</b><br>Di sini lokasi toko Anda.')
+        .openPopup();
+</script>
+
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             
             {{-- Kolom 1: Brand & Deskripsi --}}
             <div class="col-span-1 md:col-span-2">
-                <h3 class="text-xl font-bold text-blue-600 mb-4">TOKO LARAVEL</h3>
+                <div class="flex items-center gap-3 mb-4">
+                    <img src="{{ asset('GetReloved.png') }}" 
+                    class="h-4 w-auto">    
+                </div>
                 <p class="text-gray-500 text-sm leading-relaxed max-w-xs">
-                    Platform E-Commerce yang dibangun untuk memenuhi Tugas Besar Praktikum Pemrograman Web Tahun Ajaran 2025/2026.
-                </p>
+                GetReloved percaya fashion bukan hanya soal tampilan, tapi tentang pilihan sadar. Dengan memperpanjang usia pakai pakaian, kami ikut mengurangi limbah dan dampak berlebih industri fashion.                </p>
             </div>
 
             {{-- Kolom 2: Navigasi Cepat --}}
@@ -52,23 +123,24 @@
                     <li class="flex items-start gap-2">
                         <span>📍</span>
                         <span>
-                            Teknik Informatika<br>
-                            Universitas Pasundan<br>
+                            GetReloved<br>
+                            Setiabudi, Sukajadi<br>
                             Bandung, Indonesia
                         </span>
                     </li>
                     <li class="flex items-center gap-2">
                         <span>📧</span>
-                        <a href="mailto:admin@unpas.ac.id" class="hover:text-blue-600">contact@tokolaravel.test</a>
+                        <a href="mailto:admin@unpas.ac.id" class="hover:text-blue-600">contact@GetReloved.co.id</a>
                     </li>
                 </ul>
             </div>
         </div>
 
+       
         {{-- Copyright Bawah --}}
         <div class="border-t border-gray-100 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
             <p class="text-sm text-gray-400">
-                &copy; {{ date('Y') }} Kelompok Web Unpas. All rights reserved.
+                &copy; {{ date('Y') }} GetReloved. All rights reserved.
             </p>
             <div class="flex space-x-4 mt-4 md:mt-0">
                 <a href="#" class="text-gray-400 hover:text-gray-500">

@@ -11,16 +11,16 @@
                     @auth
                         @if(Auth::user()->role === 'admin')
                             <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2">
-                                 <img src="{{ asset('GetReloved.png') }}" alt="Logo" class="h-14 w-auto">
+                                 <img src="{{ asset('GetReloved.png') }}" alt="Logo" class="h-5 w-auto">
                             </a>
                         @else
                             <a href="{{ route('products.index') }}" class="flex items-center gap-2">
-                                <img src="{{ asset('GetReloved.png') }}" alt="Logo" class="h-14 w-auto">
+                                <img src="{{ asset('GetReloved.png') }}" alt="Logo" class="h-5 w-auto">
                             </a>
                         @endif
                     @else
                             <a href="{{ route('products.index') }}" class="flex items-center gap-2">
-                                <img src="{{ asset('GetReloved.png') }}" alt="Logo" class="h-14 w-auto">
+                                <img src="{{ asset('GetReloved.png') }}" alt="Logo" class="h-5 w-auto">
                     @endauth
                 </div>
 
