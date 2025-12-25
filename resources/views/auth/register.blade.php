@@ -3,19 +3,23 @@
 @section('content')
 <div class="flex w-full max-w-5xl bg-white rounded-3xl shadow-2xl overflow-hidden min-h-[600px]">
 
-    <!-- Left Side -->
+    <!-- Left Side - Login" -->
     <div class="hidden lg:flex lg:w-1/2 p-12 flex-col justify-center items-center text-white relative overflow-hidden min-h-full"
-        style="background-image: url('{{ asset('authpic.jpg') }}'); background-size: cover; background-position: center;">
+        style="background-image: url('{{ asset(path: 'authpic.jpg') }}'); background-size: cover; background-position: center;">
 
-        <div class="absolute inset-0 bg-black opacity-40"></div>
+    <!-- Blur sama Dark overlay -->
+    <div class="absolute inset-0 backdrop-blur-sm"></div>
+    <div class="absolute inset-0 bg-black opacity-40"></div>
 
         <div class="relative z-10 text-center">
-            <h1 class="text-5xl font-bold mb-6">Welcome Back</h1>
-            <p class="text-lg text-blue-100 mb-8">Sign in to continue shopping</p>
+            <h1 class="text-5xl font-bold mb-6">Udah Punya Akun?</h1>
+            <p class="text-lg text-blue-100">Masuk dulu, yuk</p>
+            <p class="text-lg text-blue-100 mb-4">Banyak barang menarik nungguin kamu.</p>
+
 
             <a href="{{ route('login') }}"
-               class="inline-block border-2 border-white text-white px-12 py-3 rounded-full hover:bg-white hover:text-blue-600 transition">
-                LOG IN
+                class="inline-block border-2 border-white text-white font-semibold px-12 py-3 rounded-full hover:bg-white hover:text-black transition">
+                MASUK
             </a>
         </div>
     </div>
@@ -23,8 +27,8 @@
     <!-- Right Side - Register -->
     <div class="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center min-h-full">
         <div class="max-w-md mx-auto">
-            <h2 class="text-4xl font-bold text-gray-800 mb-2">Register</h2>
-            <p class="text-gray-500 mb-6">Create your account</p>
+            <h2 class="text-4xl font-bold text-gray-800 mb-2">Daftar Akun</h2>
+            <p class="text-gray-500 mb-6">Daftar untuk lanjut cari barang favoritmu</p>
 
             @if ($errors->any())
                 <div class="mb-4 bg-red-50 border border-red-200 p-3 rounded-lg">
@@ -39,28 +43,23 @@
             <form method="POST" action="{{ route('register.process') }}">
                 @csrf
 
-                <input type="text" name="name" placeholder="Name" required
+                <input type="text" name="name" placeholder="Nama" required
                     class="w-full mb-4 px-4 py-3 bg-gray-100 rounded-lg">
 
                 <input type="email" name="email" placeholder="Email" required
                     class="w-full mb-4 px-4 py-3 bg-gray-100 rounded-lg">
 
-                <input type="password" name="password" placeholder="Password" required
+                <input type="password" name="password" placeholder="Kata Sandi" required
                     class="w-full mb-4 px-4 py-3 bg-gray-100 rounded-lg">
 
-                <input type="password" name="password_confirmation" placeholder="Confirm Password" required
+                <input type="password" name="password_confirmation" placeholder="Konfirmasi Kata Sandi" required
                     class="w-full mb-6 px-4 py-3 bg-gray-100 rounded-lg">
 
                 <button type="submit"
-                    class="w-full bg-blue-600 text-white font-bold py-3 rounded-full hover:bg-blue-700 transition">
-                    SIGN UP
+                    class="w-full bg-black text-white font-bold py-3 rounded-full hover:bg-gray-700 transition">
+                    DAFTAR
                 </button>
 
-                <div class="mt-6 text-center lg:hidden">
-                    <a href="{{ route('login') }}" class="text-blue-600 font-medium">
-                        Already have an account? Log In
-                    </a>
-                </div>
             </form>
         </div>
     </div>
