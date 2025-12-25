@@ -11,7 +11,7 @@
         </p>
     </div>
 
-    {{-- ERROR GLOBAL (BIAR KELIHATAN KALAU VALIDASI GAGAL) --}}
+    {{-- ERROR GLOBAL --}}
     @if ($errors->any())
         <div class="mb-6 rounded-md bg-red-100 p-4 text-red-700">
             <ul class="list-disc ml-5 text-sm">
@@ -108,7 +108,7 @@
             @enderror
         </div>
 
-        {{-- DESKRIPSI (INI YANG BIKIN UPDATE SEKARANG JALAN) --}}
+        {{-- DESKRIPSI --}}
         <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700">
                 Deskripsi Produk
