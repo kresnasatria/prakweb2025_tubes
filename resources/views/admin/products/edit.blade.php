@@ -11,8 +11,19 @@
         </p>
     </div>
 
+    {{-- ERROR GLOBAL (BIAR KELIHATAN KALAU VALIDASI GAGAL) --}}
+    @if ($errors->any())
+        <div class="mb-6 rounded-md bg-red-100 p-4 text-red-700">
+            <ul class="list-disc ml-5 text-sm">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     {{-- FORM --}}
-    <form action="{{ route('admin.products.update', $product) }}"
+    <form action="{{ route('admin.products.update', $product->id) }}"
           method="POST"
           enctype="multipart/form-data"
           class="w-full max-w-4xl">
@@ -93,6 +104,23 @@
                    required>
 
             @error('stock')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        {{-- DESKRIPSI (INI YANG BIKIN UPDATE SEKARANG JALAN) --}}
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">
+                Deskripsi Produk
+            </label>
+
+            <textarea name="description"
+                      rows="4"
+                      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm
+                             focus:ring-blue-500 focus:border-blue-500"
+                      required>{{ old('description', $product->description) }}</textarea>
+
+            @error('description')
                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
             @enderror
         </div>

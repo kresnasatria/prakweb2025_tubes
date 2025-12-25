@@ -8,6 +8,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -25,18 +26,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'description' => 'required|string',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        ], [
-            'thumbnail.image' => 'File harus berupa gambar.',
-            'thumbnail.mimes' => 'Format gambar harus: jpeg, png, jpg, gif, atau webp.',
-            'thumbnail.max' => 'Ukuran gambar maksimal 2MB.',
-        ]);
+        $validated = $this->validateData($request);
 
         $validated['slug'] = Str::slug($validated['name']) . '-' . uniqid();
 
@@ -59,35 +49,29 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
-            'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
-            'description' => 'required|string',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-        ], [
-            'thumbnail.image' => 'File harus berupa gambar.',
-            'thumbnail.mimes' => 'Format gambar harus: jpeg, png, jpg, gif, atau webp.',
-            'thumbnail.max' => 'Ukuran gambar maksimal 2MB.',
-        ]);
+        // DEBUG KERAS — HAPUS SETELAH JALAN
+        // dd('UPDATE MASUK', $request->method(), $request->path());
+
+        $validated = $this->validateData($request);
 
         if ($product->name !== $validated['name']) {
             $validated['slug'] = Str::slug($validated['name']) . '-' . uniqid();
         }
 
-        if ($request->hasFile('thumbnail')) {
-            // Hapus gambar lama jika ada
-            if ($product->thumbnail) {
-                $oldPath = str_replace('/storage/', '', $product->thumbnail);
-                Storage::disk('public')->delete($oldPath);
-            }
-            
-            $path = $request->file('thumbnail')->store('products', 'public');
-            $validated['thumbnail'] = '/storage/' . $path;
-        }
+        DB::transaction(function () use ($request, $product, &$validated) {
 
-        $product->update($validated);
+            if ($request->hasFile('thumbnail')) {
+                if ($product->thumbnail) {
+                    $old = str_replace('/storage/', '', $product->thumbnail);
+                    Storage::disk('public')->delete($old);
+                }
+
+                $path = $request->file('thumbnail')->store('products', 'public');
+                $validated['thumbnail'] = '/storage/' . $path;
+            }
+
+            $product->update($validated);
+        });
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Produk berhasil diperbarui!');
@@ -95,14 +79,26 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        // Hapus gambar jika ada
         if ($product->thumbnail) {
             $path = str_replace('/storage/', '', $product->thumbnail);
             Storage::disk('public')->delete($path);
         }
-        
+
         $product->delete();
+
         return redirect()->route('admin.products.index')
             ->with('success', 'Produk berhasil dihapus!');
+    }
+
+    private function validateData(Request $request): array
+    {
+        return $request->validate([
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'description' => 'required|string',
+            'thumbnail' => 'nullable|image|max:2048',
+        ]);
     }
 }
