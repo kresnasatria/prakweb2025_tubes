@@ -10,18 +10,17 @@
                 <div class="shrink-0 flex items-center">
                     @auth
                         @if(Auth::user()->role === 'admin')
-                            <a href="{{ route('admin.dashboard') }}" class="font-bold text-xl text-blue-600">
-                                TOKO LARAVEL
+                            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2">
+                                 <img src="{{ asset('GetReloved.png') }}" alt="Logo" class="h-14 w-auto">
                             </a>
                         @else
-                            <a href="{{ route('products.index') }}" class="font-bold text-xl text-blue-600">
-                                TOKO LARAVEL
+                            <a href="{{ route('products.index') }}" class="flex items-center gap-2">
+                                <img src="{{ asset('GetReloved.png') }}" alt="Logo" class="h-14 w-auto">
                             </a>
                         @endif
                     @else
-                        <a href="{{ route('products.index') }}" class="font-bold text-xl text-blue-600">
-                            TOKO LARAVEL
-                        </a>
+                            <a href="{{ route('products.index') }}" class="flex items-center gap-2">
+                                <img src="{{ asset('GetReloved.png') }}" alt="Logo" class="h-14 w-auto">
                     @endauth
                 </div>
 
