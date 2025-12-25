@@ -49,8 +49,7 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        // DEBUG KERAS — HAPUS SETELAH JALAN
-        // dd('UPDATE MASUK', $request->method(), $request->path());
+        
 
         $validated = $this->validateData($request);
 

@@ -71,7 +71,7 @@
                             {{ $order->created_at->format('d M Y H:i') }}
                         </td>
 
-                        {{-- AKSI (DIUBAH) --}}
+                        {{-- AKSI  --}}
                         <td class="px-6 py-4 text-right">
                             <div class="inline-flex gap-2">
                                 <a href="{{ route('admin.orders.show', $order) }}"
