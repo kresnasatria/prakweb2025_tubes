@@ -18,7 +18,7 @@ public function up(): void
         $table->string('name');
         $table->string('slug')->unique(); 
         $table->text('description');
-        $table->decimal('price', 15, 2); // 15 digit total, 2 desimal
+        $table->decimal('price', 15, 2); 
         $table->integer('stock');
         $table->string('thumbnail')->nullable(); 
         $table->timestamps();

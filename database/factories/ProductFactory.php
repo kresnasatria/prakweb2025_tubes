@@ -25,9 +25,8 @@ public function definition(): array
     return [
         'name' => ucfirst($name),
         'slug' => Str::slug($name),
-        // Ini magic-nya: Jika tidak ditentukan di seeder, dia akan bikin kategori baru otomatis
         'category_id' => Category::factory(), 
-        'price' => fake()->numberBetween(50000, 2000000), // Harga 50rb - 2jt
+        'price' => fake()->numberBetween(50000, 2000000), 
         'stock' => fake()->numberBetween(10, 100),
         'description' => fake()->paragraph(),
         'thumbnail' => fake()->imageUrl(400, 400, 'product', true),

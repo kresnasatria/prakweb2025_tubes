@@ -103,17 +103,17 @@
                 Gambar Produk
             </label>
 
-            @if ($product->image)
-                <img src="{{ asset('storage/' . $product->image) }}"
+            @if ($product->thumbnail)
+                <img src="{{ asset($product->thumbnail) }}"
                      alt="Gambar Produk"
                      class="w-32 h-32 object-cover rounded-md mb-3">
             @endif
 
             <input type="file"
-                   name="image"
+                   name="thumbnail"
                    class="mt-1 block w-full text-sm text-gray-600">
 
-            @error('image')
+            @error('thumbnail')
                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
             @enderror
         </div>
