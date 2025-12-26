@@ -15,7 +15,19 @@
             <p class="text-lg font-bold text-green-600 mt-2">
                 Rp {{ number_format($product->price, 0, ',', '.') }}
             </p>
-            <p class="text-sm text-gray-500 mt-1">Stok: {{ $product->stock }}</p>
+            <p class="text-sm text-gray-500 mt-1"> @php
+                            $status = $product->status ?? (($product->stock ?? 0) > 0 ? 'available' : 'sold');
+                        @endphp
+
+                        @if($status === 'sold')
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium rounded bg-red-100 text-red-700">
+                                Sold
+                            </span>
+                        @else
+                            <span class="inline-flex items-center px-2 py-1 text-xs font-medium rounded bg-green-100 text-green-700">
+                                Available
+                            </span>
+                        @endif </p>
         </div>
     </div>
 @empty

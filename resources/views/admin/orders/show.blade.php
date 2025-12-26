@@ -95,8 +95,15 @@
                 @foreach($order->orderItems as $item)
                     <div class="px-6 py-4 border-b flex items-center justify-between gap-4">
                         <div class="flex items-center gap-4">
-                            <img src="{{ $item->product->thumbnail ?? 'https://placehold.co/80x80' }}"
-                                 class="w-16 h-16 object-cover rounded border">
+                                                @php
+                            $thumb = $item->product->thumbnail ?? null;
+                            $thumbUrl = $thumb
+                                ? (\Illuminate\Support\Str::startsWith($thumb, ['http://','https://']) ? $thumb : asset(ltrim($thumb, '/')))
+                                : 'https://placehold.co/80x80';
+                            @endphp
+
+                            <img src="{{ $thumbUrl }}" class="w-20 h-20 object-cover rounded">
+
 
                             <div>
                                 <p class="font-medium text-gray-900">

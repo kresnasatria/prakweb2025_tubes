@@ -40,9 +40,15 @@
                     @foreach($order->orderItems as $item)
                         <div class="p-6 flex items-center justify-between">
                             <div class="flex items-center gap-4">
-                                <img src="{{ $item->product->image ? asset('storage/' . $item->product->image) : 'https://placehold.co/80x80' }}" 
-                                     class="w-20 h-20 object-cover rounded"
-                                     alt="{{ $item->product->name }}">
+                                @php
+                                    $thumb = $item->product->thumbnail ?? null;
+                                    $thumbUrl = $thumb
+                                    ? (\Illuminate\Support\Str::startsWith($thumb, ['http://','https://']) ? $thumb : asset(ltrim($thumb, '/')))
+                                    : 'https://placehold.co/80x80';
+                                @endphp
+
+                                <img src="{{ $thumbUrl }}" class="w-20 h-20 object-cover rounded">
+
                                 <div>
                                     <p class="font-semibold text-gray-900">{{ $item->product->name }}</p>
                                     <p class="text-sm text-gray-500">Rp {{ number_format($item->price, 0, ',', '.') }} x {{ $item->quantity }}</p>

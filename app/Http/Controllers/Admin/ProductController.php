@@ -52,7 +52,7 @@ class ProductController extends Controller
 
         $validated['slug'] = Str::slug($validated['name']) . '-' . uniqid();
 
-        // mapping status -> stock (biar sistem cart/order yang masih pakai stock tetap aman)
+        // mapping status -> stock 
         if ($validated['status'] === 'sold') {
             $validated['stock'] = 0;
         } else {
@@ -88,7 +88,7 @@ class ProductController extends Controller
         if ($validated['status'] === 'sold') {
             $validated['stock'] = 0;
         } else {
-            // kalau available, pastiin stok minimal 1
+            // kalau available, pastikan stok minimal 1
             $validated['stock'] = max((int) $product->stock, 1);
         }
 
@@ -132,7 +132,7 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'description' => 'required|string',
 
-            // ✅ status enum
+            // status enum
             'status' => 'required|in:available,sold',
 
             'thumbnail' => 'nullable|image|max:2048',

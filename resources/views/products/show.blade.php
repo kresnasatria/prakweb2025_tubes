@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+        @php
+            $status = $product->status ?? (($product->stock ?? 0) > 0 ? 'available' : 'sold');
+             $isSold = $status === 'sold';
+        @endphp
+
+
     <div class="bg-gray-50 min-h-screen py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -47,7 +53,12 @@
                             </div>
                             <div class="space-y-2 text-sm mt-3 font-semibold">
                                 @if ($product->stock > 0)
-                                    <span class="text-green-700">Stok tersedia: {{ $product->stock }}</span>
+                                    <span class="text-green-700">@if($isSold)
+                                                                        <span class="text-red-600 font-semibold">Status: Sold</span>
+                                                                            @else
+                                                                        <span class="text-green-700 font-semibold">Status: Available</span>
+                                                                    @endif
+</span>
                                 @else
                                     <span class="text-red-500">Stok habis</span>
                                 @endif
