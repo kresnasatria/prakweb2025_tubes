@@ -53,12 +53,30 @@
                 </div>
 
                 {{-- STOK --}}
+  
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">Stok</label>
-                    <input type="number" name="stock" value="{{ old('stock') }}"
-                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
-                    @error('stock') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    <label class="block text-sm font-medium text-gray-700">
+                        Status
+                    </label>
+
+                    <select name="status"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm
+                                focus:ring-blue-500 focus:border-blue-500"
+                            required>
+                        <option value="">-- Pilih Status --</option>
+                        <option value="available" {{ old('status') === 'available' ? 'selected' : '' }}>
+                            Available
+                        </option>
+                        <option value="sold" {{ old('status') === 'sold' ? 'selected' : '' }}>
+                            Sold
+                        </option>
+                    </select>
+
+                    @error('status')
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
+
             </div>
         </div>
 

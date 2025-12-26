@@ -15,13 +15,14 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
+
         $products = Product::with('category')
             ->when($search, function ($query, $search) {
-                $query->where(function($q) use ($search) {
-                    $q->where('name', 'like', "%$search%")
-                      ->orWhereHas('category', function($q2) use ($search) {
-                          $q2->where('name', 'like', "%$search%") ;
-                      });
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhereHas('category', function ($q2) use ($search) {
+                            $q2->where('name', 'like', "%{$search}%");
+                        });
                 });
             })
             ->latest()
@@ -36,6 +37,7 @@ class ProductController extends Controller
                 'pagination' => $pagination,
             ]);
         }
+
         return view('admin.products.index', compact('products'));
     }
 
@@ -49,7 +51,15 @@ class ProductController extends Controller
     {
         $validated = $this->validateData($request);
 
+        // slug unik
         $validated['slug'] = Str::slug($validated['name']) . '-' . uniqid();
+
+        // mapping status -> stock (biar fitur lain yang masih pakai stock aman)
+        if ($validated['status'] === 'sold') {
+            $validated['stock'] = 0;
+        } else {
+            $validated['stock'] = 1; // minimal ada stok untuk available
+        }
 
         if ($request->hasFile('thumbnail')) {
             $path = $request->file('thumbnail')->store('products', 'public');
@@ -70,16 +80,21 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        
-
         $validated = $this->validateData($request);
 
         if ($product->name !== $validated['name']) {
             $validated['slug'] = Str::slug($validated['name']) . '-' . uniqid();
         }
 
-        DB::transaction(function () use ($request, $product, &$validated) {
+        // mapping status -> stock
+        if ($validated['status'] === 'sold') {
+            $validated['stock'] = 0;
+        } else {
+            // kalau available, pastikan stock minimal 1
+            $validated['stock'] = max((int) $product->stock, 1);
+        }
 
+        DB::transaction(function () use ($request, $product, &$validated) {
             if ($request->hasFile('thumbnail')) {
                 if ($product->thumbnail) {
                     $old = str_replace('/storage/', '', $product->thumbnail);
@@ -116,9 +131,15 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
-            'stock' => 'required|integer|min:0',
             'description' => 'required|string',
+
+            // status enum dropdown di admin
+            'status' => 'required|in:available,sold',
+
             'thumbnail' => 'nullable|image|max:2048',
+        ], [
+            'status.required' => 'Status wajib dipilih.',
+            'status.in' => 'Status harus Available atau Sold.',
         ]);
     }
 }
