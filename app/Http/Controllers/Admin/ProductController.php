@@ -15,7 +15,6 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-
         $products = Product::with('category')
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
@@ -51,14 +50,13 @@ class ProductController extends Controller
     {
         $validated = $this->validateData($request);
 
-        // slug unik
         $validated['slug'] = Str::slug($validated['name']) . '-' . uniqid();
 
-        // mapping status -> stock (biar fitur lain yang masih pakai stock aman)
+        // mapping status -> stock (biar sistem cart/order yang masih pakai stock tetap aman)
         if ($validated['status'] === 'sold') {
             $validated['stock'] = 0;
         } else {
-            $validated['stock'] = 1; // minimal ada stok untuk available
+            $validated['stock'] = 1; // minimal stok untuk available
         }
 
         if ($request->hasFile('thumbnail')) {
@@ -90,14 +88,15 @@ class ProductController extends Controller
         if ($validated['status'] === 'sold') {
             $validated['stock'] = 0;
         } else {
-            // kalau available, pastikan stock minimal 1
+            // kalau available, pastiin stok minimal 1
             $validated['stock'] = max((int) $product->stock, 1);
         }
 
         DB::transaction(function () use ($request, $product, &$validated) {
+
             if ($request->hasFile('thumbnail')) {
                 if ($product->thumbnail) {
-                    $old = str_replace('/storage/', '', $product->thumbnail);
+                    $old = ltrim(str_replace('/storage/', '', $product->thumbnail), '/');
                     Storage::disk('public')->delete($old);
                 }
 
@@ -115,7 +114,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         if ($product->thumbnail) {
-            $path = str_replace('/storage/', '', $product->thumbnail);
+            $path = ltrim(str_replace('/storage/', '', $product->thumbnail), '/');
             Storage::disk('public')->delete($path);
         }
 
@@ -133,7 +132,7 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'description' => 'required|string',
 
-            // status enum dropdown di admin
+            // ✅ status enum
             'status' => 'required|in:available,sold',
 
             'thumbnail' => 'nullable|image|max:2048',

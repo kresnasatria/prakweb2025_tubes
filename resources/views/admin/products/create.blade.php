@@ -52,38 +52,28 @@
                     @error('price') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
-                {{-- STOK --}}
-  
+                {{-- STATUS (GANTI STOK) --}}
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700">
-                        Status
-                    </label>
-
+                    <label class="block text-sm font-medium text-gray-700">Status</label>
                     <select name="status"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm
-                                focus:ring-blue-500 focus:border-blue-500"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                             required>
                         <option value="">-- Pilih Status --</option>
-                        <option value="available" {{ old('status') === 'available' ? 'selected' : '' }}>
-                            Available
-                        </option>
-                        <option value="sold" {{ old('status') === 'sold' ? 'selected' : '' }}>
-                            Sold
-                        </option>
+                        <option value="available" {{ old('status') === 'available' ? 'selected' : '' }}>Available</option>
+                        <option value="sold" {{ old('status') === 'sold' ? 'selected' : '' }}>Sold</option>
                     </select>
-
-                    @error('status')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
+                    @error('status') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
-
             </div>
         </div>
 
         {{-- DESKRIPSI --}}
         <div class="mb-6">
             <label class="block text-sm font-medium text-gray-700">Deskripsi Produk</label>
-            <textarea name="description" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">{{ old('description') }}</textarea>
+            <textarea name="description" rows="4"
+                      class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      required>{{ old('description') }}</textarea>
+            @error('description') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
         </div>
 
         {{-- GAMBAR --}}
