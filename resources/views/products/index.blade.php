@@ -235,6 +235,78 @@
                 .catch(error => console.error('Error:', error));
             }
         });
+
+        
     </script>
     @endauth
+
+    {{-- Maps Toko --}}
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <style>
+        .location-card {
+            max-width: 100%;
+            margin: 60px auto 0;
+            background: #f8fafc;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 24px;
+            text-align: center;
+        }
+        .location-title {
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin-bottom: 16px;
+            color: #2d3748;
+        }
+        #map {
+            height: 350px;
+            border-radius: 12px;
+        }
+        .maps-link {
+            display: inline-block;
+            margin-top: 18px;
+            font-size: 1rem;
+            color: #2563eb;
+            font-weight: 500;
+            border: 1px solid #2563eb;
+            border-radius: 8px;
+            padding: 8px 18px;
+            transition: all 0.2s;
+        }
+        .maps-link:hover {
+            background: #2563eb;
+            color: white;
+        }
+    </style>
+
+    <div class="location-card">
+        <div class="location-title">Lokasi GetReloved</div>
+        <div id="map"></div>
+        <a class="maps-link"
+           href="https://www.google.com/maps/place/Universitas+Pasundan/@-6.866502,107.593245,17z"
+           target="_blank">
+            Buka di Google Maps
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const lat = -6.8663741705271635;
+            const lon = 107.59322353768817;
+
+            const map = L.map('map').setView([lat, lon], 15);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            L.marker([lat, lon]).addTo(map)
+                .bindPopup('<b>GetReloved</b><br>Lokasi Kami')
+                .openPopup();
+        });
+    </script>
+
 @endsection
