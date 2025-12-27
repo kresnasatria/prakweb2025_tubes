@@ -19,7 +19,37 @@
                             </div>
                             <input type="text" name="search" id="searchInput" value="{{ request('search') }}"
                                    placeholder="Ketik nama baju, celana, atau produk lainnya..."
-                                   class="pl-14 block w-full bg-white border-0 rounded-full shadow-lg ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 py-4 text-gray-700 text-lg transition hover:shadow-xl">
+                                   class="pl-14 block w-full bg-white border-0 rounded-full shadow-lg ring-1 ring-gray-200 focus:ring-2 focus:ring-black py-4 text-gray-700 text-lg transition hover:shadow-xl">
+                            <div id="searchDropdown"
+                                class="absolute top-full left-0 w-full bg-white rounded-xl shadow-xl mt-3 z-50 hidden text-left">
+
+                                <div class="p-4 border-b">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-xs text-gray-400">Pencarian Anda</span>
+                                        <button type="button" id="clearHistory"
+                                                class="text-xs text-black hover:underline">
+                                            Hapus
+                                        </button>
+                                    </div>
+                                    <ul id="searchHistory" class="space-y-2 text-gray-700 text-sm"></ul>
+                                </div>
+
+                                <div class="p-4">
+                                    <span class="text-xs text-gray-400 block mb-2">Kategori Populer</span>
+                                    <ul class="space-y-2 text-gray-700 text-sm">
+                                        @foreach($categories as $category)
+                                            <li>
+                                                <a href="{{ route('products.index', ['category' => $category->id]) }}"
+                                                class="block cursor-pointer hover:text-gray-400">
+                                                    {{ $category->name }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+
+                            </div>
+
                         </div>
                     </div>
 
@@ -70,7 +100,7 @@
                                 <a href="{{ route('products.index') }}" class="flex-1 py-2 text-center text-gray-500 hover:text-gray-800 text-sm font-medium transition border border-gray-200 rounded-md hover:bg-gray-50 bg-white">
                                     Reset
                                 </a>
-                                <button type="submit" class="flex-1 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 shadow-sm transition font-medium text-sm">
+                                <button type="submit" class="flex-1 bg-black text-white py-2 rounded-md hover:bg-gray-700 shadow-sm transition font-medium text-sm">
                                     Cari
                                 </button>
                             </div>
@@ -308,5 +338,71 @@
                 .openPopup();
         });
     </script>
+
+            <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const input = document.getElementById('searchInput');
+            const dropdown = document.getElementById('searchDropdown');
+            const historyList = document.getElementById('searchHistory');
+            const clearBtn = document.getElementById('clearHistory');
+
+            if (!input || !dropdown) return;
+
+            function getHistory() {
+                return JSON.parse(localStorage.getItem('search_history')) || [];
+            }
+
+            function saveHistory(keyword) {
+                let history = getHistory();
+                history = history.filter(item => item !== keyword);
+                history.unshift(keyword);
+                history = history.slice(0, 5);
+                localStorage.setItem('search_history', JSON.stringify(history));
+            }
+
+            function renderHistory() {
+                historyList.innerHTML = '';
+                const history = getHistory();
+
+                if (history.length === 0) {
+                    historyList.innerHTML =
+                        '<li class="text-gray-400 text-sm">Belum ada pencarian</li>';
+                    return;
+                }
+
+                history.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    li.className = 'cursor-pointer hover:text-blue-600';
+                    li.onclick = () => {
+                        input.value = item;
+                        dropdown.classList.add('hidden');
+                        input.form.submit();
+                    };
+                    historyList.appendChild(li);
+                });
+            }
+
+            input.addEventListener('focus', () => {
+                renderHistory();
+                dropdown.classList.remove('hidden');
+            });
+
+            input.addEventListener('blur', () => {
+                setTimeout(() => dropdown.classList.add('hidden'), 200);
+            });
+
+            input.form.addEventListener('submit', () => {
+                if (input.value.trim()) {
+                    saveHistory(input.value.trim());
+                }
+            });
+
+            clearBtn.addEventListener('click', () => {
+                localStorage.removeItem('search_history');
+                renderHistory();
+            });
+        });
+</script>
 
 @endsection
